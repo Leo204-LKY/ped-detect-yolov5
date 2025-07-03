@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Datasets and YOLOv5 Repos
+VOC2012/
+VOC2012_YOLO_PERSON/
+yolov5/
