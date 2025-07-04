@@ -363,6 +363,12 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Datasets and YOLOv5 Repos
-VOC2012/
-VOC2012_YOLO_PERSON/
+dataset/
 yolov5/
+
+# Models
+*.onnx
+
+# Test resources
+*.jpg
+*.png
