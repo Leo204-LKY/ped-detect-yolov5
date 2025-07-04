@@ -7,7 +7,6 @@ using namespace std;
 using namespace cv;
 
 const vector<string> classNames = { "person" };	// Types of objects to detect, persons only in this case
-const string modelPath = "model.onnx";
 
 /*
 Process steps:
@@ -17,7 +16,7 @@ Process steps:
 4. Visualize results (draw bounding boxes on the frame)
 */
 
-static void detectAndDraw(
+static int detectAndDraw(
 	Mat& frame,
 	dnn::Net& net,
 	float confThreshold = 0.25,
@@ -80,11 +79,13 @@ static void detectAndDraw(
 	// Draw the results
 	for (int idx : indices) {
 		Rect box = boxes[idx];
-		rectangle(frame, box, Scalar(0, 255, 0), 2);
+		rectangle(frame, box, Scalar(0, 0, 255), 2);
 		string label = format("%.2f", confidences[idx]);
 		if (!classNames.empty()) {
 			label = classNames[classIds[idx]] + ": " + label;
 		}
-		putText(frame, label, Point(box.x, box.y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 255, 0), 1);
+		putText(frame, label, Point(box.x, box.y - 5), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 255), 1);
 	}
+
+	return (int)indices.size();
 }
