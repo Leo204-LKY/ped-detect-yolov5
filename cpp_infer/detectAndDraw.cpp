@@ -42,6 +42,8 @@ static int detectAndDraw(
 	Mat output = outputs[0];
 	output = output.reshape(1, output.size[1]);
 
+	// Calculate the scaling factors for bounding box coordinates
+	// Used to convert the normalized coordinates back to the original frame size
 	float xFactor = frame.cols / (float)inputWidth;
 	float yFactor = frame.rows / (float)inputHeight;
 
@@ -51,12 +53,16 @@ static int detectAndDraw(
 
 	// Extract the bounding box, confidence, and class
 	// Iterate through the output rows
+	// Each row contains: [centerX, centerY, width, height, confidence, classScore1, classScore2, ...]
+	// We only detect "person" class (class 0), so only classScore1 is relevant
 	for (int i = 0; i < output.rows; ++i) {
+		// Get the head address pointer of the current row i, and convert it to a float array
 		float* data = (float*)output.ptr(i);
-		float conf = data[4];
-		float cls_score = data[5];
-		float final_conf = conf * cls_score;
+		float conf = data[4];					// Confidence score for the detection
+		float cls_score = data[5];				// Class score for the "person" class (index 0)
+		float final_conf = conf * cls_score;	// Final confidence score: confidence * class score
 
+		// Only consider detections with confidence above the threshold
 		if (final_conf > confThreshold) {
 			int centerX = static_cast<int>(data[0] * xFactor);
 			int centerY = static_cast<int>(data[1] * yFactor);
